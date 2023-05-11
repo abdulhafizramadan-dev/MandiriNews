@@ -3,4 +3,5 @@
     <string name="logo_bank_mandiri">Logo bank mandiri</string>
     <string name="headline_news">Berita Terkini</string>
     <string name="all_news">Semua Berita</string>
+    <string name="image_not_found">Image not found!</string>
 </resources>

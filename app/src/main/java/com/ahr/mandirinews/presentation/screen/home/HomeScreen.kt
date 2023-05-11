@@ -1,4 +1,4 @@
-package com.ahr.mandirinews.presentation.screen
+package com.ahr.mandirinews.presentation.screen.home
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.PaddingValues
@@ -9,22 +9,38 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.ahr.mandirinews.R
 import com.ahr.mandirinews.presentation.component.NewsHeadingSection
 import com.ahr.mandirinews.presentation.component.NewsHeadlineCard
+import com.ahr.mandirinews.presentation.component.NewsHeadlineCardShimmer
 import com.ahr.mandirinews.presentation.component.NewsSmallCard
 import com.ahr.mandirinews.presentation.component.NewsTopAppBar
 import com.ahr.mandirinews.ui.theme.MandiriNewsTheme
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 
+@Suppress("UNUSED_PARAMETER")
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@Destination(start = true)
 @Composable
 fun HomeScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigator: DestinationsNavigator = EmptyDestinationsNavigator
 ) {
+
+    val homeViewModel: HomeViewModel = hiltViewModel()
+    val homeScreenUiState by homeViewModel.homeScreenUiState.collectAsState()
+
+    val headlineNews = homeScreenUiState.headlineNews
+
     Scaffold(
         topBar = {
              NewsTopAppBar()
@@ -41,17 +57,24 @@ fun HomeScreen(
                 )
             }
             item {
-                HorizontalPager(
-                    pageCount = 3,
-                    contentPadding = PaddingValues(horizontal = 8.dp)
-                ) {
-                    NewsHeadlineCard(
-                        title = "US inflation eased to 4.9% in April as Fed tightening takes effect - Financial Times",
-                        imageUrl = "https://s.abcnews.com/images/US/interview-abc-ml-230510_1683716960105_hpMain_16x9_992.jpg",
-                        date = "10 Jan, 2021",
-                        source = "Financial Times",
-                        modifier = Modifier.padding(horizontal = 8.dp)
+                if (homeScreenUiState.headlineNews.isEmpty()) {
+                    NewsHeadlineCardShimmer(
+                        modifier = Modifier.padding(16.dp)
                     )
+                } else {
+                    HorizontalPager(
+                        pageCount = 10,
+                        contentPadding = PaddingValues(horizontal = 8.dp)
+                    ) {
+                        NewsHeadlineCard(
+                            title = headlineNews[it].title,
+                            imageUrl = headlineNews[it].urlToImage ?: "",
+                            date = "10 Jan, 2021",
+                            source = headlineNews[it].source.name,
+                            modifier = Modifier.padding(horizontal = 8.dp)
+                        )
+                    }
+
                 }
             }
             stickyHeader { 

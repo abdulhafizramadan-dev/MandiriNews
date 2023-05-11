@@ -1,7 +1,9 @@
 package com.ahr.mandirinews.presentation.component
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,6 +26,7 @@ import coil.request.ImageRequest
 import com.ahr.mandirinews.R
 import com.ahr.mandirinews.ui.theme.MandiriNewsTheme
 import com.skydoves.landscapist.coil.CoilImage
+import com.valentinilk.shimmer.shimmer
 
 @Composable
 fun NewsHeadlineCard(
@@ -31,7 +35,7 @@ fun NewsHeadlineCard(
     title: String,
     source: String,
     date: String,
-    @DrawableRes previewImage: Int = R.drawable.logo_mandiri
+    @DrawableRes previewImage: Int = R.drawable.logo_mandiri,
 ) {
     val context = LocalContext.current
     Column(modifier = modifier) {
@@ -43,10 +47,16 @@ fun NewsHeadlineCard(
                     .build()
             },
             previewPlaceholder = previewImage,
+            loading = {
+                ImageLoader(type = ImageLoaderType.Loading)
+            },
+            failure = {
+                ImageLoader(type = ImageLoaderType.Error)
+            },
             modifier = Modifier
                 .height(200.dp)
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(16.dp)),
+                .clip(RoundedCornerShape(16.dp))
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
@@ -77,6 +87,59 @@ fun NewsHeadlineCard(
     }
 }
 
+@Composable
+fun NewsHeadlineCardShimmer(
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier.shimmer()) {
+        Box(
+            modifier = Modifier
+                .height(200.dp)
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .background(MaterialTheme.colorScheme.onSurfaceVariant)
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Box(
+            modifier = Modifier
+                .height(12.dp)
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .background(MaterialTheme.colorScheme.onSurfaceVariant)
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Box(
+            modifier = Modifier
+                .height(12.dp)
+                .fillMaxWidth(0.6f)
+                .clip(RoundedCornerShape(16.dp))
+                .background(MaterialTheme.colorScheme.onSurfaceVariant)
+        )
+        Row(
+            modifier = Modifier
+                .padding(vertical = 16.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .height(12.dp)
+                    .fillMaxWidth(.3f)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(MaterialTheme.colorScheme.onSurfaceVariant)
+            )
+            Box(
+                modifier = Modifier
+                    .height(12.dp)
+                    .fillMaxWidth(.3f)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(MaterialTheme.colorScheme.onSurfaceVariant)
+            )
+        }
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun PreviewNewsHeadlineCard() {
@@ -86,6 +149,18 @@ fun PreviewNewsHeadlineCard() {
             imageUrl = "https://static.www.nfl.com/image/private/t_editorial_landscape_12_desktop/league/qctjhv74mkbijidnxysv",
             date = "10 Jan, 2021",
             source = "Financial Times",
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth()
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewNewsHeadlineCardShimmer() {
+    MandiriNewsTheme {
+        NewsHeadlineCardShimmer(
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxWidth()
