@@ -35,6 +35,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+        isCoreLibraryDesugaringEnabled = true
     }
     kotlinOptions {
         jvmTarget = "17"
@@ -54,6 +55,8 @@ android {
 
 dependencies {
 
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
+
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.activity.compose)
@@ -64,7 +67,7 @@ dependencies {
 
     // Material Library
     implementation(libs.androidx.material.icons.extended)
-
+    implementation(libs.material)
     implementation(libs.material3)
 
     // Network Library
@@ -94,6 +97,9 @@ dependencies {
     // Compose Navigation Library
     implementation(libs.compose.navigation)
     ksp(libs.compose.navigation.ksp)
+
+    // MessageBarCompose Library
+    implementation(libs.message.bar.compose)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)

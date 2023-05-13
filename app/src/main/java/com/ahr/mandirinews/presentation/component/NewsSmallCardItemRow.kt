@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ahr.mandirinews.ui.theme.MandiriNewsTheme
@@ -70,7 +71,8 @@ fun NewsSmallCardItem(
             text = label,
             maxLines = 1,
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f)
+            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f),
+            overflow = TextOverflow.Ellipsis
         )
     }
 }

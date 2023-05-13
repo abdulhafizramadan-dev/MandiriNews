@@ -2,6 +2,7 @@ package com.ahr.mandirinews.di
 
 import android.content.Context
 import androidx.room.Room
+import com.ahr.mandirinews.R
 import com.ahr.mandirinews.data.local.MandiriNewsDatabase
 import com.ahr.mandirinews.data.networking.service.NewsApiService
 import com.chuckerteam.chucker.api.ChuckerCollector
@@ -44,10 +45,11 @@ object NetworkModule {
     @Singleton
     @Provides
     fun provideRetrofit(
-        chuckerClient: OkHttpClient
+        chuckerClient: OkHttpClient,
+        @ApplicationContext context: Context
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(NewsApiService.BASE_URL)
+            .baseUrl(context.getString(R.string.base_url))
             .addConverterFactory(GsonConverterFactory.create())
             .client(chuckerClient)
             .build()

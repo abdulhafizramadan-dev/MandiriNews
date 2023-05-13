@@ -1,7 +1,9 @@
 package com.ahr.mandirinews.presentation.component
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -26,6 +29,7 @@ import coil.request.ImageRequest
 import com.ahr.mandirinews.R
 import com.ahr.mandirinews.ui.theme.MandiriNewsTheme
 import com.skydoves.landscapist.coil.CoilImage
+import com.valentinilk.shimmer.shimmer
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,6 +46,9 @@ fun NewsSmallCard(
     Card(
         onClick = onCardClicked,
         modifier = modifier.height(100.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
+        )
     ) {
         Row(
             modifier = Modifier
@@ -55,6 +62,12 @@ fun NewsSmallCard(
                         .build()
                 },
                 previewPlaceholder = previewImage,
+                loading = {
+                    ImageLoader(type = ImageLoaderType.Loading)
+                },
+                failure = {
+                    ImageLoader(type = ImageLoaderType.Error)
+                },
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight()
@@ -84,6 +97,20 @@ fun NewsSmallCard(
     }
 }
 
+@Composable
+fun NewsSmallCardShimmer(
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier = modifier
+            .clip(RoundedCornerShape(16.dp))
+            .shimmer()
+            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .height(100.dp)
+            .fillMaxWidth(),
+    )
+}
+
 
 @Preview(showBackground = true)
 @Composable
@@ -100,3 +127,16 @@ fun PreviewNewsSmallCard() {
         )
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewNewsSmallCardShimmer() {
+    MandiriNewsTheme {
+        NewsSmallCardShimmer(
+            modifier = Modifier
+                .padding(all = 16.dp)
+                .fillMaxWidth()
+        )
+    }
+}
+

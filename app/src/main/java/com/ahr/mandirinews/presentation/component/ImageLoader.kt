@@ -17,6 +17,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.ahr.mandirinews.R
 import com.ahr.mandirinews.ui.theme.MandiriNewsTheme
@@ -29,7 +30,8 @@ enum class ImageLoaderType(val icon: ImageVector) {
 @Composable
 fun ImageLoader(
     modifier: Modifier = Modifier,
-    type: ImageLoaderType = ImageLoaderType.Loading
+    type: ImageLoaderType = ImageLoaderType.Loading,
+    imageSize: Dp = 64.dp
 ) {
     Box(
         modifier = modifier
@@ -41,7 +43,7 @@ fun ImageLoader(
         Icon(
             imageVector = type.icon,
             contentDescription = stringResource(R.string.image_not_found),
-            modifier = Modifier.size(64.dp),
+            modifier = Modifier.size(imageSize),
             tint = MaterialTheme.colorScheme.onBackground.copy(.6f)
         )
     }

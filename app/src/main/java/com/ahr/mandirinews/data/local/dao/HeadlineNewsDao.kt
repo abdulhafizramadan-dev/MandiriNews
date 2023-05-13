@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
 import com.ahr.mandirinews.data.local.entity.HeadlineNewsEntity
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface HeadlineNewsDao {
@@ -13,7 +12,9 @@ interface HeadlineNewsDao {
     suspend fun getHeadlineNews(): List<HeadlineNewsEntity>
 
     @Upsert
-    suspend fun upsertHeadlineNews(headlineNewsEntities: List<HeadlineNewsEntity>)
+    suspend fun upsertHeadlineNews(
+        headlineNewsEntities: List<HeadlineNewsEntity>
+    )
 
     @Query("DELETE FROM headlinenewsentity")
     suspend fun clearHeadlineNews()

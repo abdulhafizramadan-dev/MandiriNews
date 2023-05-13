@@ -9,14 +9,14 @@ import com.ahr.mandirinews.domain.model.Source
 import com.ahr.mandirinews.util.emptyString
 
 /**
- * Mapper from HeadlineDto to HeadlineNewsEntity
+ * Mapper from HeadlineNewsDto to HeadlineNewsEntity
  */
 
 fun List<HeadlineNewsDto>.toHeadlineNewsEntities(): List<HeadlineNewsEntity> = map {
-    it.toHeadlineNewsEntity()
+    it.toNewsEntity()
 }
 
-fun HeadlineNewsDto.toHeadlineNewsEntity(): HeadlineNewsEntity =
+fun HeadlineNewsDto.toNewsEntity(): HeadlineNewsEntity =
     HeadlineNewsEntity(
         urlToImage = urlToImage,
         title = title ?: emptyString(),
@@ -36,11 +36,11 @@ fun SourceDto.toSourceEntity(): SourceEntity =
  * Mapper from HeadlineNewsEntity to HeadlineNews Domain
  */
 
-fun List<HeadlineNewsEntity>.toHeadlineNewsDomain(): List<HeadlineNews> = map {
-    it.toHeadlineNewsDomain()
+fun List<HeadlineNewsEntity>.toHeadlineNewsDomains(): List<HeadlineNews> = map {
+    it.toHeadlineNewsDomains()
 }
 
-fun HeadlineNewsEntity.toHeadlineNewsDomain(): HeadlineNews =
+fun HeadlineNewsEntity.toHeadlineNewsDomains(): HeadlineNews =
     HeadlineNews(
         urlToImage = urlToImage,
         title = title,

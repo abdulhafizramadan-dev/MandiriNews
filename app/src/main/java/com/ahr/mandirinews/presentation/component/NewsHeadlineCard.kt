@@ -17,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -97,7 +96,7 @@ fun NewsHeadlineCardShimmer(
                 .height(200.dp)
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp))
-                .background(MaterialTheme.colorScheme.onSurfaceVariant)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
         )
         Spacer(modifier = Modifier.height(8.dp))
         Box(
@@ -105,7 +104,7 @@ fun NewsHeadlineCardShimmer(
                 .height(12.dp)
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp))
-                .background(MaterialTheme.colorScheme.onSurfaceVariant)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
         )
         Spacer(modifier = Modifier.height(4.dp))
         Box(
@@ -113,7 +112,7 @@ fun NewsHeadlineCardShimmer(
                 .height(12.dp)
                 .fillMaxWidth(0.6f)
                 .clip(RoundedCornerShape(16.dp))
-                .background(MaterialTheme.colorScheme.onSurfaceVariant)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
         )
         Row(
             modifier = Modifier
@@ -127,14 +126,14 @@ fun NewsHeadlineCardShimmer(
                     .height(12.dp)
                     .fillMaxWidth(.3f)
                     .clip(RoundedCornerShape(16.dp))
-                    .background(MaterialTheme.colorScheme.onSurfaceVariant)
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
             )
             Box(
                 modifier = Modifier
                     .height(12.dp)
                     .fillMaxWidth(.3f)
                     .clip(RoundedCornerShape(16.dp))
-                    .background(MaterialTheme.colorScheme.onSurfaceVariant)
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
             )
         }
     }
