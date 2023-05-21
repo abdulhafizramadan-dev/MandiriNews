@@ -16,6 +16,7 @@ interface NewsApiService {
     @GET(Everything)
     suspend fun getNews(
         @Query("q") query: String,
+        @Query("language") language: String,
         @Query("page") page: Int,
         @Query("pageSize") pageSize: Int,
         @Query("apiKey") apiKey: String,

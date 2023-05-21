@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.ahr.mandirinews.R
 import com.ahr.mandirinews.ui.theme.MandiriNewsTheme
+import com.valentinilk.shimmer.shimmer
 
 enum class ImageLoaderType(val icon: ImageVector) {
     Loading(icon = Icons.Outlined.Image),
@@ -33,16 +34,19 @@ fun ImageLoader(
     type: ImageLoaderType = ImageLoaderType.Loading,
     imageSize: Dp = 64.dp
 ) {
+    val loadingShimmerModifier = if (type == ImageLoaderType.Loading)
+        Modifier.shimmer() else Modifier
     Box(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.surfaceVariant)
-            .clip(RoundedCornerShape(16.dp)),
+            .clip(RoundedCornerShape(16.dp))
+            .then(loadingShimmerModifier),
         contentAlignment = Alignment.Center
     ) {
         Icon(
             imageVector = type.icon,
-            contentDescription = stringResource(R.string.image_not_found),
+            contentDescription = stringResource(R.string.desc_image_not_found),
             modifier = Modifier.size(imageSize),
             tint = MaterialTheme.colorScheme.onBackground.copy(.6f)
         )

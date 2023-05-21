@@ -1,7 +1,23 @@
 <resources>
     <string name="app_name">Mandiri News</string>
-    <string name="logo_bank_mandiri">Logo bank mandiri</string>
-    <string name="headline_news">Berita Terkini</string>
-    <string name="all_news">Semua Berita</string>
-    <string name="image_not_found">Image not found!</string>
+
+    <string name="label_headline_news">Berita Terkini</string>
+    <string name="label_all_news">Semua Berita</string>
+
+    <string name="desc_image_not_found">Image not found!</string>
+    <string name="desc_logo_bank_mandiri">Logo bank mandiri</string>
+    <string name="desc_notification_icon">Notification icon</string>
+    <string name="desc_search_icon">Search icon</string>
+    <string name="desc_locale_icon">Locale icon</string>
+    <string name="desc_country_icon">Country icon</string>
+    <string name="desc_back_to_home_screen">Back to home screen</string>
+    <string name="desc_search_news">Search news</string>
+
+    <string name="placeholder_search_news">what news do you want today?</string>
+    <string name="placeholder_search_country">What country did you choose?</string>
+    <string name="desc_clear_search_query">Clear search query</string>
+    <string name="label_dialog_change_country">Are you sure change location to %s?</string>
+    <string name="desc_dialog_change_country">All news and languages will adapt to the selected location!</string>
+    <string name="change">Change</string>
+    <string name="cancel">Cancel</string>
 </resources>

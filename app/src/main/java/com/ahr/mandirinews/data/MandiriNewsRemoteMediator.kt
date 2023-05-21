@@ -16,7 +16,8 @@ class MandiriNewsRemoteMediator(
     private val newsApiService: NewsApiService,
     private val mandiriNewsDatabase: MandiriNewsDatabase,
     private val apiKey: String,
-    private val query: String
+    private val query: String,
+    private val country: String,
 ) : RemoteMediator<Int, NewsEntity>() {
 
     override suspend fun load(
@@ -40,8 +41,9 @@ class MandiriNewsRemoteMediator(
             val newsResponse = newsApiService.getNews(
                 query = query,
                 page = page,
+                apiKey = apiKey,
+                language = country,
                 pageSize = state.config.pageSize,
-                apiKey = apiKey
             )
             val newsEntities = newsResponse.news?.toNewsEntities() ?: emptyList()
             val endOfPaginationReached = newsEntities.isEmpty()

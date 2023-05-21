@@ -89,6 +89,8 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.paging)
 
+    implementation(libs.androidx.datastore.preferences)
+
     // Dependency Injection Library
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
@@ -100,6 +102,8 @@ dependencies {
 
     // MessageBarCompose Library
     implementation(libs.message.bar.compose)
+
+    implementation(libs.worldCountryData)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)

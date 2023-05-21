@@ -1,17 +1,14 @@
 package com.ahr.mandirinews.presentation.screen.home
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.activity.compose.BackHandler
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -19,40 +16,34 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.itemContentType
-import androidx.paging.compose.itemKey
 import com.ahr.mandirinews.R
+import com.ahr.mandirinews.domain.model.HeadlineNews
 import com.ahr.mandirinews.domain.model.News
-import com.ahr.mandirinews.presentation.component.NewsHeadingSection
-import com.ahr.mandirinews.presentation.component.NewsHeadlineCard
-import com.ahr.mandirinews.presentation.component.NewsHeadlineCardShimmer
-import com.ahr.mandirinews.presentation.component.NewsSmallCard
-import com.ahr.mandirinews.presentation.component.NewsSmallCardShimmer
-import com.ahr.mandirinews.presentation.component.NewsTopAppBar
+import com.ahr.mandirinews.presentation.component.NewsAlertDialog
+import com.ahr.mandirinews.presentation.component.topappbar.NewsTopAppBar
+import com.ahr.mandirinews.presentation.component.topappbar.NewsTopAppBarAction
 import com.ahr.mandirinews.ui.theme.MandiriNewsTheme
-import com.ahr.mandirinews.util.emptyString
-import com.ahr.mandirinews.util.toLocalDate
-import com.ahr.mandirinews.util.toNewsFormat
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import com.stevdzasan.messagebar.ContentWithMessageBar
 import com.stevdzasan.messagebar.MessageBarPosition
+import com.stevdzasan.messagebar.MessageBarState
 import com.stevdzasan.messagebar.rememberMessageBarState
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Suppress("UNUSED_PARAMETER")
-@OptIn(
-    ExperimentalMaterial3Api::class,
-    ExperimentalFoundationApi::class,
-    ExperimentalMaterialApi::class
-)
+@OptIn(ExperimentalMaterialApi::class)
 @Destination(start = true)
 @Composable
 fun HomeScreen(
@@ -63,12 +54,27 @@ fun HomeScreen(
     val homeViewModel: HomeViewModel = hiltViewModel()
     val homeScreenUiState by homeViewModel.homeScreenUiState.collectAsState()
 
+    val modalBottomSheetState = rememberModalBottomSheetState(
+        initialValue = ModalBottomSheetValue.Hidden
+    )
+
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
     val messageBarState = rememberMessageBarState()
 
+    val localeCountry = homeScreenUiState.localeCountry
     val headlineNews = homeScreenUiState.headlineNews
     val newsLazyPagingItems = homeScreenUiState.news.collectAsLazyPagingItems()
     val loadingState = homeScreenUiState.isLoading
     val refreshState = homeScreenUiState.isRefresh
+
+    val dialogState = homeScreenUiState.dialogState
+    val dialogTitle = homeScreenUiState.dialogTitle
+    val dialogMessage = homeScreenUiState.dialogMessage
+
+    val countrySearchQuery by homeViewModel.countrySearchQuery.collectAsState()
+    val countryList by homeViewModel.countries.collectAsState(initial = emptyList())
 
     LaunchedEffect(key1 = homeScreenUiState.error) {
         if (homeScreenUiState.error != null) {
@@ -76,7 +82,7 @@ fun HomeScreen(
         }
     }
 
-    val pullRequestState = rememberPullRefreshState(
+    val pullRefreshState = rememberPullRefreshState(
         refreshing = refreshState,
         onRefresh = {
             newsLazyPagingItems.refresh()
@@ -84,9 +90,102 @@ fun HomeScreen(
         }
     )
 
+    val onLocaleActionClicked: () -> Unit = {
+        scope.launch { modalBottomSheetState.show() }
+    }
+
+//    val modalShape =
+
+    BackHandler(enabled = modalBottomSheetState.isVisible) {
+        scope.launch { modalBottomSheetState.hide() }
+    }
+
+    if (dialogState) {
+        NewsAlertDialog(
+            title = dialogTitle,
+            message = dialogMessage,
+            confirmText = stringResource(R.string.change),
+            cancelText = stringResource(R.string.cancel),
+            onConfirm = {
+                homeViewModel.setUserLocaleLocation()
+                homeViewModel.setDialogState(state = false)
+                scope.launch {
+                    modalBottomSheetState.hide()
+                    delay(500L)
+                    homeViewModel.refresh(showRefreshIndication = false)
+                    newsLazyPagingItems.retry()
+                }
+            },
+            onCancel = {
+                homeViewModel.setDialogState(state = false)
+            }
+        )
+    }
+
+    ModalBottomSheetLayout(
+        sheetState = modalBottomSheetState,
+        sheetShape = MaterialTheme.shapes.large,
+        sheetBackgroundColor = MaterialTheme.colorScheme.background,
+        sheetContent = {
+            HomeScreenModalContent(
+                searchQuery = countrySearchQuery,
+                onSearchQueryChanged = homeViewModel::searchCountry,
+                countryList = countryList,
+                selectedCountry = localeCountry,
+                onCountryClicked = { country ->
+                    homeViewModel.setDialogState(
+                        state = true,
+                        title = context.getString(R.string.label_dialog_change_country, country.name),
+                        message = context.getString(R.string.desc_dialog_change_country),
+                        selectedCountry = country
+                    )
+                },
+                modifier = Modifier
+                    .padding(top = 20.dp)
+                    .padding(horizontal = 16.dp)
+            )
+        },
+    ) {
+        HomeScreenScaffold(
+            messageBarState = messageBarState,
+            homeScreenUiState = homeScreenUiState,
+            pullRefreshState = pullRefreshState,
+            loadingState = loadingState,
+            refreshState = refreshState,
+            countryIcon = localeCountry.flag,
+            headlineNews = headlineNews,
+            newsLazyPagingItems = newsLazyPagingItems,
+            onLocaleActionClicked = onLocaleActionClicked
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
+@Composable
+fun HomeScreenScaffold(
+    modifier: Modifier = Modifier,
+    messageBarState: MessageBarState,
+    homeScreenUiState: HomeScreenUiState,
+    pullRefreshState: PullRefreshState,
+    loadingState: Boolean,
+    refreshState: Boolean,
+    @DrawableRes countryIcon: Int,
+    headlineNews: List<HeadlineNews>,
+    newsLazyPagingItems: LazyPagingItems<News>,
+    onLocaleActionClicked: () -> Unit
+) {
     Scaffold(
         topBar = {
-             NewsTopAppBar()
+            NewsTopAppBar(
+                countryIcon = countryIcon,
+                onActionButtonClicked = { actionType ->
+                    when (actionType) {
+                        NewsTopAppBarAction.Search -> TODO()
+                        NewsTopAppBarAction.Locale -> onLocaleActionClicked()
+                        NewsTopAppBarAction.Notification -> TODO()
+                    }
+                },
+            )
         },
         modifier = modifier
     ) { paddingValues ->
@@ -95,82 +194,19 @@ fun HomeScreen(
             position = MessageBarPosition.BOTTOM,
             modifier = Modifier.padding(paddingValues)
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .pullRefresh(state = pullRequestState)
-            ) {
-                LazyColumn {
-                    item {
-                        NewsHeadingSection(
-                            title = stringResource(id = R.string.headline_news),
-                            modifier = Modifier.padding(horizontal = 16.dp)
-                        )
-                    }
-                    item {
-                        if (!(homeScreenUiState.headlineNews.isEmpty() || loadingState)) {
-                            HorizontalPager(
-                                pageCount = 10,
-                                contentPadding = PaddingValues(horizontal = 8.dp)
-                            ) {
-                                NewsHeadlineCard(
-                                    title = headlineNews[it].title,
-                                    imageUrl = headlineNews[it].urlToImage ?: "",
-                                    date = headlineNews[it].publishedAt.toLocalDate().toNewsFormat(),
-                                    source = headlineNews[it].source.name,
-                                    modifier = Modifier.padding(horizontal = 8.dp)
-                                )
-                            }
-                        } else {
-                            NewsHeadlineCardShimmer(
-                                modifier = Modifier.padding(16.dp)
-                            )
-                        }
-                    }
-                    stickyHeader {
-                        NewsHeadingSection(
-                            title = stringResource(R.string.all_news),
-                            modifier = Modifier.padding(horizontal = 16.dp)
-                        )
-                    }
-                    items(
-                        count = newsLazyPagingItems.itemCount,
-                        key = newsLazyPagingItems.itemKey(key = { it.url }),
-                        contentType = newsLazyPagingItems.itemContentType()
-                    ) { index ->
-                        if (!(homeScreenUiState.headlineNews.isEmpty() || loadingState)) {
-                            val news = newsLazyPagingItems[index] ?: News()
-                            NewsSmallCard(
-                                imageUrl = news.urlToImage ?: emptyString(),
-                                title = news.title,
-                                author = news.author,
-                                date = news.publishedAt.toLocalDate().toNewsFormat(),
-                                modifier = Modifier
-                                    .padding(horizontal = 16.dp)
-                                    .padding(bottom = 8.dp)
-                                    .fillMaxWidth()
-                            )
-                        } else {
-                            NewsSmallCardShimmer(
-                                modifier = Modifier
-                                    .padding(horizontal = 16.dp)
-                                    .padding(bottom = 8.dp)
-                                    .fillMaxWidth()
-                            )
-                        }
-
-                    }
-                }
-                PullRefreshIndicator(
-                    refreshing = refreshState,
-                    state = pullRequestState,
-                    modifier = Modifier.align(Alignment.TopCenter),
-                    backgroundColor = MaterialTheme.colorScheme.background
-                )
-            }
+            HomeScreenContent(
+                homeScreenUiState = homeScreenUiState,
+                pullRefreshState = pullRefreshState,
+                loadingState = loadingState,
+                refreshState = refreshState,
+                headlineNews = headlineNews,
+                newsLazyPagingItems = newsLazyPagingItems
+            )
         }
     }
 }
+
+
 
 @Preview(showBackground = true)
 @Composable

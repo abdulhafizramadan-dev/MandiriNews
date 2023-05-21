@@ -53,6 +53,7 @@ class MandiriNewsRepositoryImpl @Inject constructor(
     @OptIn(ExperimentalPagingApi::class)
     override fun getNews(
         query: String,
+        language: String,
         apiKey: String,
     ): Flow<PagingData<News>> {
         return Pager(
@@ -61,7 +62,11 @@ class MandiriNewsRepositoryImpl @Inject constructor(
                 mandiriNewsDatabase.newsDao.getNews()
             },
             remoteMediator = MandiriNewsRemoteMediator(
-                newsApiService, mandiriNewsDatabase, apiKey, query
+                newsApiService = newsApiService,
+                mandiriNewsDatabase = mandiriNewsDatabase,
+                query = query,
+                country = language,
+                apiKey = apiKey
             )
         ).flow.map { pagingData ->
             pagingData.map { newsEntity -> newsEntity.toNewsDomain() }

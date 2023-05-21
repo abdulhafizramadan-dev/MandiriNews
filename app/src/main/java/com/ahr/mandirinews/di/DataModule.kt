@@ -1,6 +1,9 @@
 package com.ahr.mandirinews.di
 
 import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
 import com.ahr.mandirinews.R
 import com.ahr.mandirinews.data.local.MandiriNewsDatabase
@@ -70,6 +73,8 @@ object NetworkModule {
  * Module for local database
  */
 
+private val Context.datastore: DataStore<Preferences> by preferencesDataStore(name = "mandiri_news_preferences")
+
 @Module
 @InstallIn(SingletonComponent::class)
 object LocalModule {
@@ -84,6 +89,14 @@ object LocalModule {
             klass = MandiriNewsDatabase::class.java,
             name = MandiriNewsDatabase.NAME
         ).build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideUserPreferences(
+        @ApplicationContext context: Context
+    ): DataStore<Preferences> {
+        return context.datastore
     }
 
 }

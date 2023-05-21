@@ -45,7 +45,7 @@ fun NewsHeadingSection(
 fun PreviewNewsHeadingSection() {
     MandiriNewsTheme {
         NewsHeadingSection(
-            title = stringResource(R.string.headline_news),
+            title = stringResource(R.string.label_headline_news),
             modifier = Modifier.fillMaxWidth()
         )
     }

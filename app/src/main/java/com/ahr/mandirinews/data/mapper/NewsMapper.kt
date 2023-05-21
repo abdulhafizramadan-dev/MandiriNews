@@ -34,8 +34,8 @@ fun List<NewsEntity>.toNewsDomains(): List<News> = map {
 fun NewsEntity.toNewsDomain(): News =
     News(
         urlToImage = urlToImage,
-        title = title ?: emptyString(),
-        url = url ?: emptyString(),
-        publishedAt = publishedAt ?: emptyString(),
-        author = author ?: emptyString()
+        title = title,
+        url = url,
+        publishedAt = publishedAt,
+        author = author
     )

@@ -1,4 +1,4 @@
-package com.ahr.mandirinews.presentation.component
+package com.ahr.mandirinews.presentation.component.card
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
@@ -27,6 +27,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.request.ImageRequest
 import com.ahr.mandirinews.R
+import com.ahr.mandirinews.presentation.component.ImageLoader
+import com.ahr.mandirinews.presentation.component.ImageLoaderType
+import com.ahr.mandirinews.presentation.component.NewsSmallCardItemRow
 import com.ahr.mandirinews.ui.theme.MandiriNewsTheme
 import com.skydoves.landscapist.coil.CoilImage
 import com.valentinilk.shimmer.shimmer

@@ -15,6 +15,7 @@ interface MandiriNewsRepository {
 
     fun getNews(
         query: String,
+        language: String,
         apiKey: String
     ): Flow<PagingData<News>>
 
