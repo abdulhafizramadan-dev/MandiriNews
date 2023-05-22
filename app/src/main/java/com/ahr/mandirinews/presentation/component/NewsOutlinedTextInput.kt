@@ -1,6 +1,8 @@
 package com.ahr.mandirinews.presentation.component
 
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -12,6 +14,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,6 +32,11 @@ fun NewsOutlinedTextInput(
     placeholder: String,
     leadingIcon: (@Composable () -> Unit)? = null,
     trailingIcon: (@Composable () -> Unit)? = null,
+    maxLines: Int = Integer.MAX_VALUE,
+    singleLine: Boolean = false,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    focusRequester: FocusRequester = FocusRequester.Default
 ) {
     OutlinedTextField(
         value = text,
@@ -47,9 +56,13 @@ fun NewsOutlinedTextInput(
             )
         },
         shape = MaterialTheme.shapes.large,
-        modifier = modifier.height(50.dp),
+        modifier = modifier.height(50.dp).focusRequester(focusRequester),
         leadingIcon = leadingIcon,
-        trailingIcon = trailingIcon
+        trailingIcon = trailingIcon,
+        maxLines = maxLines,
+        singleLine = singleLine,
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions
     )
 }
 

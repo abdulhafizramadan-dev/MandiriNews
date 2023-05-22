@@ -20,4 +20,5 @@
     <string name="desc_dialog_change_country">All news and languages will adapt to the selected location!</string>
     <string name="change">Change</string>
     <string name="cancel">Cancel</string>
+    <string name="label_clear_search_query">Clear search query</string>
 </resources>

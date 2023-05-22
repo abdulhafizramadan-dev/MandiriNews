@@ -6,11 +6,12 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
 import androidx.room.withTransaction
+import com.ahr.mandirinews.data.MandiriNewsPagingSource
 import com.ahr.mandirinews.data.MandiriNewsRemoteMediator
 import com.ahr.mandirinews.data.local.MandiriNewsDatabase
+import com.ahr.mandirinews.data.mapper.newsEntityToDomain
 import com.ahr.mandirinews.data.mapper.toHeadlineNewsDomains
 import com.ahr.mandirinews.data.mapper.toHeadlineNewsEntities
-import com.ahr.mandirinews.data.mapper.toNewsDomain
 import com.ahr.mandirinews.data.networking.service.NewsApiService
 import com.ahr.mandirinews.domain.model.HeadlineNews
 import com.ahr.mandirinews.domain.model.News
@@ -53,7 +54,6 @@ class MandiriNewsRepositoryImpl @Inject constructor(
     @OptIn(ExperimentalPagingApi::class)
     override fun getNews(
         query: String,
-        language: String,
         apiKey: String,
     ): Flow<PagingData<News>> {
         return Pager(
@@ -65,11 +65,23 @@ class MandiriNewsRepositoryImpl @Inject constructor(
                 newsApiService = newsApiService,
                 mandiriNewsDatabase = mandiriNewsDatabase,
                 query = query,
-                country = language,
                 apiKey = apiKey
             )
         ).flow.map { pagingData ->
-            pagingData.map { newsEntity -> newsEntity.toNewsDomain() }
+            pagingData.map { newsEntity -> newsEntity.newsEntityToDomain() }
         }
+    }
+
+    override fun searchNews(query: String, apiKey: String): Flow<PagingData<News>> {
+        return Pager(
+            config = PagingConfig(pageSize = 10),
+            pagingSourceFactory = {
+                MandiriNewsPagingSource(
+                    newsApiService,
+                    query,
+                    apiKey
+                )
+            }
+        ).flow
     }
 }

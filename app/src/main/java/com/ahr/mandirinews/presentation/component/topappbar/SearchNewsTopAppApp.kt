@@ -1,17 +1,31 @@
 package com.ahr.mandirinews.presentation.component.topappbar
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.ahr.mandirinews.R
 import com.ahr.mandirinews.presentation.component.NewsOutlinedTextInput
 import com.ahr.mandirinews.ui.theme.MandiriNewsTheme
@@ -23,8 +37,26 @@ fun SearchNewsTopAppApp(
     onNavigateUpClicked: () -> Unit = {},
     searchQuery: String,
     onSearchQueryChanged: (String) -> Unit,
-    onSearchButtonClicked: () -> Unit = {}
+    onSearchButtonClicked: () -> Unit = {},
+    searchButtonEnabled: Boolean = true,
+    onSearchImeActionClicked: () -> Unit = {},
+    focusRequester: FocusRequester = FocusRequester.Default
 ) {
+
+    val searchButtonBackgroundColor = if (searchButtonEnabled) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+    val searchButtonContentColor = if (searchButtonEnabled) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+
+    val searchTrailingIcon: (@Composable () -> Unit)? = if (searchQuery.isNotEmpty()) {
+        {
+            IconButton(onClick = { onSearchQueryChanged("") }) {
+                Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = stringResource(R.string.label_clear_search_query)
+                )
+            }
+        }
+    } else null
+
     TopAppBar(
         navigationIcon = {
             IconButton(onClick = onNavigateUpClicked) {
@@ -39,14 +71,31 @@ fun SearchNewsTopAppApp(
                 modifier = Modifier.fillMaxWidth(),
                 text = searchQuery,
                 onTextChanged = onSearchQueryChanged,
-                placeholder = stringResource(id = R.string.placeholder_search_news)
+                placeholder = stringResource(id = R.string.placeholder_search_news),
+                maxLines = 1,
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                keyboardActions = KeyboardActions(onSearch = {
+                    onSearchImeActionClicked()
+                }),
+                trailingIcon = searchTrailingIcon,
+                focusRequester = focusRequester
             )
         },
         actions = {
-            IconButton(onClick = onSearchButtonClicked) {
+            Box(
+                modifier = Modifier
+                    .clip(MaterialTheme.shapes.large)
+                    .clickable(enabled = searchButtonEnabled) { onSearchButtonClicked() }
+                    .background(searchButtonBackgroundColor)
+                    .height(50.dp)
+                    .padding(horizontal = 12.dp),
+                contentAlignment = Alignment.Center
+            ) {
                 Icon(
                     imageVector = Icons.Outlined.Search,
-                    contentDescription = stringResource(R.string.desc_search_news)
+                    contentDescription = stringResource(R.string.desc_search_news),
+                    tint = searchButtonContentColor
                 )
             }
         },

@@ -35,7 +35,7 @@ class HomeViewModel @Inject constructor(
     private val _homeScreenUiState = MutableStateFlow(
         HomeScreenUiState(
             news = mandiriNewsRepository
-                .getNews(query = "crypto", language = "en", apiKey = apiKey)
+                .getNews(query = "crypto", apiKey = apiKey)
                 .cachedIn(viewModelScope)
         )
     )

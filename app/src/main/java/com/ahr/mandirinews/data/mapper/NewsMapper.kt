@@ -9,11 +9,11 @@ import com.ahr.mandirinews.util.emptyString
  * Mapper from NewsDto to NewsEntity
  */
 
-fun List<NewsDto>.toNewsEntities(): List<NewsEntity> = map {
-    it.toNewsEntity()
+fun List<NewsDto>.newsEntitiesToDomains(): List<NewsEntity> = map {
+    it.newsDtoToEntity()
 }
 
-fun NewsDto.toNewsEntity(): NewsEntity =
+fun NewsDto.newsDtoToEntity(): NewsEntity =
     NewsEntity(
         urlToImage = urlToImage,
         title = title ?: emptyString(),
@@ -24,14 +24,28 @@ fun NewsDto.toNewsEntity(): NewsEntity =
 
 
 /**
+ * Mapper from NewsDto to News Domain
+ */
+
+fun List<NewsDto>.newsDtosToDomains(): List<News> = map {
+    it.newsDtoToDomain()
+}
+
+fun NewsDto.newsDtoToDomain(): News =
+    News(
+        urlToImage = urlToImage,
+        title = title ?: "",
+        url = url ?: "",
+        publishedAt = publishedAt ?: "",
+        author = author ?: ""
+    )
+
+
+/**
  * Mapper from NewsEntity to News Domain
  */
 
-fun List<NewsEntity>.toNewsDomains(): List<News> = map {
-    it.toNewsDomain()
-}
-
-fun NewsEntity.toNewsDomain(): News =
+fun NewsEntity.newsEntityToDomain(): News =
     News(
         urlToImage = urlToImage,
         title = title,

@@ -31,6 +31,7 @@ import com.ahr.mandirinews.domain.model.News
 import com.ahr.mandirinews.presentation.component.NewsAlertDialog
 import com.ahr.mandirinews.presentation.component.topappbar.NewsTopAppBar
 import com.ahr.mandirinews.presentation.component.topappbar.NewsTopAppBarAction
+import com.ahr.mandirinews.presentation.screen.destinations.SearchScreenDestination
 import com.ahr.mandirinews.ui.theme.MandiriNewsTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -45,6 +46,7 @@ import kotlinx.coroutines.launch
 @Suppress("UNUSED_PARAMETER")
 @OptIn(ExperimentalMaterialApi::class)
 @Destination(start = true)
+//@Destination
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
@@ -92,6 +94,14 @@ fun HomeScreen(
 
     val onLocaleActionClicked: () -> Unit = {
         scope.launch { modalBottomSheetState.show() }
+    }
+
+    val onSearchActionClicked: () -> Unit = {
+        navigator.navigate(direction = SearchScreenDestination())
+    }
+
+    val onNotificationActionClicked: () -> Unit = {
+
     }
 
 //    val modalShape =
@@ -155,7 +165,9 @@ fun HomeScreen(
             countryIcon = localeCountry.flag,
             headlineNews = headlineNews,
             newsLazyPagingItems = newsLazyPagingItems,
-            onLocaleActionClicked = onLocaleActionClicked
+            onLocaleActionClicked = onLocaleActionClicked,
+            onSearchActionClicked = onSearchActionClicked,
+            onNotificationActionClicked = onNotificationActionClicked
         )
     }
 }
@@ -172,7 +184,9 @@ fun HomeScreenScaffold(
     @DrawableRes countryIcon: Int,
     headlineNews: List<HeadlineNews>,
     newsLazyPagingItems: LazyPagingItems<News>,
-    onLocaleActionClicked: () -> Unit
+    onLocaleActionClicked: () -> Unit = {},
+    onSearchActionClicked: () -> Unit = {},
+    onNotificationActionClicked: () -> Unit = {},
 ) {
     Scaffold(
         topBar = {
@@ -180,9 +194,9 @@ fun HomeScreenScaffold(
                 countryIcon = countryIcon,
                 onActionButtonClicked = { actionType ->
                     when (actionType) {
-                        NewsTopAppBarAction.Search -> TODO()
+                        NewsTopAppBarAction.Search -> onSearchActionClicked()
                         NewsTopAppBarAction.Locale -> onLocaleActionClicked()
-                        NewsTopAppBarAction.Notification -> TODO()
+                        NewsTopAppBarAction.Notification -> onNotificationActionClicked()
                     }
                 },
             )

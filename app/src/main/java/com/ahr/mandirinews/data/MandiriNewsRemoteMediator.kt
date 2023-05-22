@@ -8,7 +8,7 @@ import androidx.room.withTransaction
 import com.ahr.mandirinews.data.local.MandiriNewsDatabase
 import com.ahr.mandirinews.data.local.entity.NewsEntity
 import com.ahr.mandirinews.data.local.entity.RemoteKey
-import com.ahr.mandirinews.data.mapper.toNewsEntities
+import com.ahr.mandirinews.data.mapper.newsEntitiesToDomains
 import com.ahr.mandirinews.data.networking.service.NewsApiService
 
 @OptIn(ExperimentalPagingApi::class)
@@ -17,7 +17,6 @@ class MandiriNewsRemoteMediator(
     private val mandiriNewsDatabase: MandiriNewsDatabase,
     private val apiKey: String,
     private val query: String,
-    private val country: String,
 ) : RemoteMediator<Int, NewsEntity>() {
 
     override suspend fun load(
@@ -42,10 +41,9 @@ class MandiriNewsRemoteMediator(
                 query = query,
                 page = page,
                 apiKey = apiKey,
-                language = country,
                 pageSize = state.config.pageSize,
             )
-            val newsEntities = newsResponse.news?.toNewsEntities() ?: emptyList()
+            val newsEntities = newsResponse.news?.newsEntitiesToDomains() ?: emptyList()
             val endOfPaginationReached = newsEntities.isEmpty()
 
             mandiriNewsDatabase.withTransaction {
