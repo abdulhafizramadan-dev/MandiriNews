@@ -1,6 +1,7 @@
 package com.ahr.mandirinews.presentation.screen.home
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +17,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
@@ -30,6 +33,7 @@ import com.ahr.mandirinews.presentation.component.card.NewsHeadlineCardShimmer
 import com.ahr.mandirinews.presentation.component.card.NewsSmallCard
 import com.ahr.mandirinews.presentation.component.card.NewsSmallCardShimmer
 import com.ahr.mandirinews.util.emptyString
+import com.ahr.mandirinews.util.launchBrowser
 import com.ahr.mandirinews.util.toLocalDate
 import com.ahr.mandirinews.util.toNewsFormat
 
@@ -44,6 +48,10 @@ fun HomeScreenContent(
     headlineNews: List<HeadlineNews>,
     newsLazyPagingItems: LazyPagingItems<News>,
 ) {
+
+    val context = LocalContext.current
+    val primaryColor = MaterialTheme.colorScheme.primary.toArgb()
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -62,12 +70,15 @@ fun HomeScreenContent(
                         pageCount = 10,
                         contentPadding = PaddingValues(horizontal = 8.dp)
                     ) {
+                        val headline = headlineNews[it]
                         NewsHeadlineCard(
-                            title = headlineNews[it].title,
-                            imageUrl = headlineNews[it].urlToImage ?: "",
-                            date = headlineNews[it].publishedAt.toLocalDate().toNewsFormat(),
-                            source = headlineNews[it].source.name,
-                            modifier = Modifier.padding(horizontal = 8.dp)
+                            title = headline.title,
+                            imageUrl = headline.urlToImage ?: "",
+                            date = headline.publishedAt.toLocalDate().toNewsFormat(),
+                            source = headline.source.name,
+                            modifier = Modifier
+                                .clickable { context.launchBrowser(headline.url, primaryColor) }
+                                .padding(horizontal = 8.dp)
                         )
                     }
                 } else {
@@ -97,7 +108,10 @@ fun HomeScreenContent(
                         modifier = Modifier
                             .padding(horizontal = 16.dp)
                             .padding(bottom = 8.dp)
-                            .fillMaxWidth()
+                            .fillMaxWidth(),
+                        onCardClicked = {
+                            context.launchBrowser(news.url, primaryColor)
+                        }
                     )
                 } else {
                     NewsSmallCardShimmer(

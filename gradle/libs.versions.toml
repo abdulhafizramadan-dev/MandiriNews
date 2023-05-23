@@ -1,4 +1,5 @@
 [versions]
+browser = "1.5.0"
 com-android-application = "8.1.0-alpha11"
 compose-navigation = "1.9.42-beta"
 accompanist-swiperefresh = "0.31.2-alpha"
@@ -30,6 +31,7 @@ worldCountryData = "1.5.4-alpha-1"
 [libraries]
 
 # Jetpack Compose BOM
+androidx-browser = { module = "androidx.browser:browser", version.ref = "browser" }
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
 activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
