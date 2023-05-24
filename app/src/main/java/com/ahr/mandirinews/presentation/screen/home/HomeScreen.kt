@@ -45,8 +45,8 @@ import kotlinx.coroutines.launch
 
 @Suppress("UNUSED_PARAMETER")
 @OptIn(ExperimentalMaterialApi::class)
-@Destination(start = true)
-//@Destination
+//@Destination(start = true)
+@Destination
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,

@@ -107,6 +107,9 @@ dependencies {
 
     implementation(libs.worldCountryData)
 
+    implementation(libs.lottie.compose)
+
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)

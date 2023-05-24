@@ -13,6 +13,7 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven { url = URI.create("https://jitpack.io") }
+        maven { url = URI.create("https://oss.sonatype.org/content/repositories/snapshots/") }
     }
 }
 

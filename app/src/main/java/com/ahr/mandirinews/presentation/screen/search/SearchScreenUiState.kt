@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 data class SearchScreenUiState(
-    val isLoading: Boolean = false,
+    val isFirstLoad: Boolean = true,
     val searchQuery: String = "",
     val news: Flow<PagingData<News>> = flow {  }
 )

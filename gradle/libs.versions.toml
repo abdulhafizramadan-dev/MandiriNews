@@ -6,6 +6,7 @@ accompanist-swiperefresh = "0.31.2-alpha"
 compose-shimmer = "1.0.5"
 datastorePreferences = "1.0.0"
 desugar_jdk_libs = "2.0.3"
+lottieCompose = "6.0.0"
 message_bar_compose = "1.0.5"
 hilt-android = "2.44.2"
 hilt-android-compiler = "2.44"
@@ -41,6 +42,7 @@ espresso-core = { group = "androidx.test.espresso", name = "espresso-core", vers
 lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
 androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended"}
 
+lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottieCompose" }
 ui = { group = "androidx.compose.ui", name = "ui" }
 ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }

@@ -6,7 +6,6 @@ import androidx.paging.cachedIn
 import com.ahr.mandirinews.di.NewsApiKeyQualifier
 import com.ahr.mandirinews.domain.repository.MandiriNewsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
@@ -24,18 +23,16 @@ class SearchViewModel @Inject constructor(
     val searchScreenUiState get() = _searchScreenUiState.asStateFlow()
 
     val searchButtonEnabled get() = _searchScreenUiState.map { value ->
-        !value.isLoading && value.searchQuery.isNotEmpty()
+        !value.isFirstLoad && value.searchQuery.isNotEmpty()
     }
 
     fun searchNews() {
         viewModelScope.launch {
-            setLoadingState(state = true)
+            setFirstLoadState(state = false)
             val searchQuery = _searchScreenUiState.value.searchQuery
             _searchScreenUiState.value = _searchScreenUiState.value.copy(
                 news = mandiriNewsRepository.searchNews(query = searchQuery, apiKey = apiKey).cachedIn(viewModelScope)
             )
-            delay(2000L)
-            setLoadingState(false)
         }
     }
 
@@ -45,9 +42,9 @@ class SearchViewModel @Inject constructor(
         )
     }
 
-    private fun setLoadingState(state: Boolean) {
+    private fun setFirstLoadState(state: Boolean) {
         _searchScreenUiState.value = _searchScreenUiState.value.copy(
-            isLoading = state
+            isFirstLoad = state
         )
     }
 

@@ -16,6 +16,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
+import com.ahr.mandirinews.R
 import com.ahr.mandirinews.domain.model.News
 import com.ahr.mandirinews.presentation.component.card.NewsSmallCard
 import com.ahr.mandirinews.presentation.component.card.NewsSmallCardShimmer
@@ -33,40 +34,49 @@ fun SearchScreenContent(
     val context = LocalContext.current
     val primaryColor = MaterialTheme.colorScheme.primary.toArgb()
 
-    val prependLoadingState = newsLazyPagingItems.loadState.prepend == LoadState.Loading
+    val isNewsNotEmpty = newsLazyPagingItems.itemCount > 0
 
-    LazyColumn(
-        contentPadding = PaddingValues(horizontal = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = modifier.fillMaxSize()
-    ) {
-        items(
-            count = newsLazyPagingItems.itemCount,
-            key = newsLazyPagingItems.itemKey(key = { it.url }),
-            contentType = newsLazyPagingItems.itemContentType()
-        ) { index ->
-            val news = newsLazyPagingItems[index] ?: News()
-            NewsSmallCard(
-                imageUrl = news.urlToImage ?: emptyString(),
-                title = news.title,
-                author = news.author,
-                date = news.publishedAt.toLocalDate().toNewsFormat(),
-                modifier = Modifier.fillMaxWidth(),
-                onCardClicked = {
-                    context.launchBrowser(news.url, primaryColor)
-                }
-            )
-        }
-        if (prependLoadingState) {
-            items(count = 10) {
-                NewsSmallCardShimmer(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .padding(bottom = 8.dp)
-                        .fillMaxWidth()
+    if (isNewsNotEmpty) {
+
+        val prependLoadingState = newsLazyPagingItems.loadState.prepend == LoadState.Loading
+
+        LazyColumn(
+            contentPadding = PaddingValues(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = modifier.fillMaxSize()
+        ) {
+            items(
+                count = newsLazyPagingItems.itemCount,
+                key = newsLazyPagingItems.itemKey(key = { it.url }),
+                contentType = newsLazyPagingItems.itemContentType()
+            ) { index ->
+                val news = newsLazyPagingItems[index] ?: News()
+                NewsSmallCard(
+                    imageUrl = news.urlToImage ?: emptyString(),
+                    title = news.title,
+                    author = news.author,
+                    date = news.publishedAt.toLocalDate().toNewsFormat(),
+                    modifier = Modifier.fillMaxWidth(),
+                    onCardClicked = {
+                        context.launchBrowser(news.url, primaryColor)
+                    }
                 )
             }
+            if (prependLoadingState) {
+                items(count = 10) {
+                    NewsSmallCardShimmer(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .padding(bottom = 8.dp)
+                            .fillMaxWidth()
+                    )
+                }
+            }
         }
+    } else {
+        NewsLottieScreenAnimation(
+            rawRes = R.raw.lottie_search_not_found,
+            modifier = modifier
+        )
     }
-
 }
