@@ -12,20 +12,20 @@ import com.ahr.mandirinews.util.emptyString
  * Mapper from HeadlineNewsDto to HeadlineNewsEntity
  */
 
-fun List<HeadlineNewsDto>.toHeadlineNewsEntities(): List<HeadlineNewsEntity> = map {
-    it.newsDtoToEntity()
+fun List<HeadlineNewsDto>.headlineNewsDtosToEntities(): List<HeadlineNewsEntity> = map {
+    it.headlineNewsDtoToEntity()
 }
 
-fun HeadlineNewsDto.newsDtoToEntity(): HeadlineNewsEntity =
+fun HeadlineNewsDto.headlineNewsDtoToEntity(): HeadlineNewsEntity =
     HeadlineNewsEntity(
         urlToImage = urlToImage,
         title = title ?: emptyString(),
         url = url ?: emptyString(),
         publishedAt = publishedAt ?: emptyString(),
-        source = source?.toSourceEntity()
+        source = source?.sourceDtoToEntity()
     )
 
-fun SourceDto.toSourceEntity(): SourceEntity =
+fun SourceDto.sourceDtoToEntity(): SourceEntity =
     SourceEntity(
         name = name ?: emptyString(),
         sourceId = sourceId
@@ -36,20 +36,20 @@ fun SourceDto.toSourceEntity(): SourceEntity =
  * Mapper from HeadlineNewsEntity to HeadlineNews Domain
  */
 
-fun List<HeadlineNewsEntity>.toHeadlineNewsDomains(): List<HeadlineNews> = map {
-    it.toHeadlineNewsDomains()
+fun List<HeadlineNewsEntity>.recentSearchEntitiesToDomains(): List<HeadlineNews> = map {
+    it.headlineNewsEntityToDomain()
 }
 
-fun HeadlineNewsEntity.toHeadlineNewsDomains(): HeadlineNews =
+fun HeadlineNewsEntity.headlineNewsEntityToDomain(): HeadlineNews =
     HeadlineNews(
         urlToImage = urlToImage,
         title = title,
         url = url,
         publishedAt = publishedAt,
-        source = source?.toSourceDomain() ?: Source()
+        source = source?.sourceEntityToDomain() ?: Source()
     )
 
-fun SourceEntity.toSourceDomain(): Source =
+fun SourceEntity.sourceEntityToDomain(): Source =
     Source(
         name = name,
         sourceId = sourceId

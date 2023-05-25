@@ -10,10 +10,10 @@ import com.ahr.mandirinews.util.emptyString
  */
 
 fun List<NewsDto>.newsEntitiesToDomains(): List<NewsEntity> = map {
-    it.newsDtoToEntity()
+    it.headlineNewsDtoToEntity()
 }
 
-fun NewsDto.newsDtoToEntity(): NewsEntity =
+fun NewsDto.headlineNewsDtoToEntity(): NewsEntity =
     NewsEntity(
         urlToImage = urlToImage,
         title = title ?: emptyString(),

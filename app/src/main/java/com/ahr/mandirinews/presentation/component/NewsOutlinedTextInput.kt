@@ -56,13 +56,15 @@ fun NewsOutlinedTextInput(
             )
         },
         shape = MaterialTheme.shapes.large,
-        modifier = modifier.height(50.dp).focusRequester(focusRequester),
+        modifier = modifier
+            .height(50.dp)
+            .focusRequester(focusRequester),
         leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,
         maxLines = maxLines,
         singleLine = singleLine,
         keyboardOptions = keyboardOptions,
-        keyboardActions = keyboardActions
+        keyboardActions = keyboardActions,
     )
 }
 

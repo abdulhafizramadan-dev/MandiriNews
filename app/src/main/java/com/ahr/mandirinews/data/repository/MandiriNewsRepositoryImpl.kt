@@ -9,12 +9,14 @@ import androidx.room.withTransaction
 import com.ahr.mandirinews.data.MandiriNewsPagingSource
 import com.ahr.mandirinews.data.MandiriNewsRemoteMediator
 import com.ahr.mandirinews.data.local.MandiriNewsDatabase
+import com.ahr.mandirinews.data.mapper.headlineNewsDtosToEntities
 import com.ahr.mandirinews.data.mapper.newsEntityToDomain
-import com.ahr.mandirinews.data.mapper.toHeadlineNewsDomains
-import com.ahr.mandirinews.data.mapper.toHeadlineNewsEntities
+import com.ahr.mandirinews.data.mapper.recentSearchDomainsToEntity
+import com.ahr.mandirinews.data.mapper.recentSearchEntitiesToDomains
 import com.ahr.mandirinews.data.networking.service.NewsApiService
 import com.ahr.mandirinews.domain.model.HeadlineNews
 import com.ahr.mandirinews.domain.model.News
+import com.ahr.mandirinews.domain.model.RecentSearch
 import com.ahr.mandirinews.domain.model.Resource
 import com.ahr.mandirinews.domain.repository.MandiriNewsRepository
 import kotlinx.coroutines.flow.Flow
@@ -30,6 +32,8 @@ class MandiriNewsRepositoryImpl @Inject constructor(
     private val mandiriNewsDatabase: MandiriNewsDatabase
 ) : MandiriNewsRepository {
 
+    private val recentSearchDao get() = mandiriNewsDatabase.recentSearchDao
+
     override fun getHeadlineNews(
         country: String,
         apiKey: String,
@@ -39,15 +43,15 @@ class MandiriNewsRepositoryImpl @Inject constructor(
         val headlineNewsDao = mandiriNewsDatabase.headlineNewsDao
 
         mandiriNewsDatabase.withTransaction {
-            val headlineNewsEntities = headlineNewsResponse.headlineNews?.toHeadlineNewsEntities() ?: emptyList()
+            val headlineNewsEntities = headlineNewsResponse.headlineNews?.headlineNewsDtosToEntities() ?: emptyList()
             headlineNewsDao.clearHeadlineNews()
             headlineNewsDao.upsertHeadlineNews(headlineNewsEntities)
         }
 
-        val headlineNewsDomain = headlineNewsDao.getHeadlineNews().toHeadlineNewsDomains()
+        val headlineNewsDomain = headlineNewsDao.getHeadlineNews().recentSearchEntitiesToDomains()
         emit(Resource.Success(headlineNewsDomain))
     }.catch { error ->
-        val headlineNewsDomain = mandiriNewsDatabase.headlineNewsDao.getHeadlineNews().toHeadlineNewsDomains()
+        val headlineNewsDomain = mandiriNewsDatabase.headlineNewsDao.getHeadlineNews().recentSearchEntitiesToDomains()
         emit(Resource.Error(error = error, data = headlineNewsDomain))
     }
 
@@ -83,5 +87,23 @@ class MandiriNewsRepositoryImpl @Inject constructor(
                 )
             }
         ).flow
+    }
+
+    override fun getAllRecentSearch(): Flow<List<RecentSearch>> {
+        return recentSearchDao.getAllRecentSearch().map {
+            it.recentSearchEntitiesToDomains()
+        }
+    }
+
+    override suspend fun insertRecentSearch(recentSearch: RecentSearch) {
+        recentSearchDao.insertRecentSearch(recentSearch.recentSearchDomainsToEntity())
+    }
+
+    override suspend fun deleteRecentSearch(id: Int) {
+        recentSearchDao.deleteRecentSearch(id)
+    }
+
+    override suspend fun clearRecentSearch() {
+        recentSearchDao.clearRecentSearch()
     }
 }

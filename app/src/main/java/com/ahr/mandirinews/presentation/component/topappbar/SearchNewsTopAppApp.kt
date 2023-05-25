@@ -22,12 +22,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ahr.mandirinews.R
 import com.ahr.mandirinews.presentation.component.NewsOutlinedTextInput
+import com.ahr.mandirinews.presentation.screen.search.SearchScreenUiStateType
 import com.ahr.mandirinews.ui.theme.MandiriNewsTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,7 +42,8 @@ fun SearchNewsTopAppApp(
     onSearchButtonClicked: () -> Unit = {},
     searchButtonEnabled: Boolean = true,
     onSearchImeActionClicked: () -> Unit = {},
-    focusRequester: FocusRequester = FocusRequester.Default
+    focusRequester: FocusRequester = FocusRequester.Default,
+    onSearchInputFocusChanged: (SearchScreenUiStateType) -> Unit = {}
 ) {
 
     val searchButtonBackgroundColor = if (searchButtonEnabled) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
@@ -68,7 +71,12 @@ fun SearchNewsTopAppApp(
         },
         title = {
             NewsOutlinedTextInput(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .onFocusChanged { focusState ->
+                        val searchScreenUiStateType = if (focusState.isFocused) SearchScreenUiStateType.FOCUSED else SearchScreenUiStateType.UNFOCUSED
+                        onSearchInputFocusChanged(searchScreenUiStateType)
+                    },
                 text = searchQuery,
                 onTextChanged = onSearchQueryChanged,
                 placeholder = stringResource(id = R.string.placeholder_search_news),

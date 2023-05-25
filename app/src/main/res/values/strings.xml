@@ -21,4 +21,8 @@
     <string name="change">Change</string>
     <string name="cancel">Cancel</string>
     <string name="label_clear_search_query">Clear search query</string>
+    <string name="pick_the_history_news">Pick the history news</string>
+    <string name="delete">Delete</string>
+    <string name="label_dialog_delete_recent_search">Are you sure to delete your history : %s?</string>
+    <string name="desc_dialog_delete_recent_search">The history will completely delete from your history list!</string>
 </resources>
