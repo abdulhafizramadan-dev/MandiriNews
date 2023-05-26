@@ -11,6 +11,7 @@ data class SearchScreenUiState(
     val searchQuery: String = "",
     val news: Flow<PagingData<News>> = flow {  },
     val recentSearch: List<RecentSearch> = emptyList(),
+    val errorMessage: String? = null,
     val dialogState: Boolean = false,
     val dialogTitle: String = "",
     val dialogMessage: String = "",

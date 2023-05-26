@@ -3,9 +3,11 @@ package com.ahr.mandirinews.presentation.component.topappbar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -74,7 +76,8 @@ fun SearchNewsTopAppApp(
                 modifier = Modifier
                     .fillMaxWidth()
                     .onFocusChanged { focusState ->
-                        val searchScreenUiStateType = if (focusState.isFocused) SearchScreenUiStateType.FOCUSED else SearchScreenUiStateType.UNFOCUSED
+                        val searchScreenUiStateType =
+                            if (focusState.isFocused) SearchScreenUiStateType.FOCUSED else SearchScreenUiStateType.UNFOCUSED
                         onSearchInputFocusChanged(searchScreenUiStateType)
                     },
                 text = searchQuery,
@@ -106,6 +109,7 @@ fun SearchNewsTopAppApp(
                     tint = searchButtonContentColor
                 )
             }
+            Spacer(modifier = Modifier.width(16.dp))
         },
         modifier = modifier
     )

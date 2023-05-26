@@ -32,14 +32,24 @@ class SearchViewModel @Inject constructor(
         getAllRecentSearch()
     }
 
-    fun searchNews() {
+    fun actionRecentSearch() {
+        when (_searchScreenUiState.value.screenActionState) {
+            SearchScreenUiStateAction.NEW_SEARCH -> {
+                insertRecentSearch()
+                searchNews()
+            }
+            SearchScreenUiStateAction.DELETE_SEARCH -> deleteRecentSearch()
+            SearchScreenUiStateAction.RECENT_SEARCH -> searchNews()
+        }
+    }
+
+    private fun searchNews() {
         viewModelScope.launch {
             val searchQuery = _searchScreenUiState.value.searchQuery
             _searchScreenUiState.value = _searchScreenUiState.value.copy(
                 news = mandiriNewsRepository.searchNews(query = searchQuery, apiKey = apiKey)
                     .cachedIn(viewModelScope)
             )
-            resetTempRecentSearchId()
         }
     }
 
@@ -53,24 +63,12 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    fun actionRecentSearch() {
-        when (_searchScreenUiState.value.screenActionState) {
-            SearchScreenUiStateAction.NEW_SEARCH -> {
-                insertRecentSearch()
-                searchNews()
-            }
-            SearchScreenUiStateAction.DELETE_SEARCH -> deleteRecentSearch()
-            SearchScreenUiStateAction.RECENT_SEARCH -> searchNews()
-        }
-    }
-
     private fun insertRecentSearch() {
         viewModelScope.launch {
             val searchQuery = _searchScreenUiState.value.searchQuery
             mandiriNewsRepository.insertRecentSearch(
                 RecentSearch(text = searchQuery)
             )
-            resetTempRecentSearchId()
         }
     }
 
@@ -78,7 +76,6 @@ class SearchViewModel @Inject constructor(
         viewModelScope.launch {
             val recentSearchId = _searchScreenUiState.value.tempRecentSearchId
             mandiriNewsRepository.deleteRecentSearch(recentSearchId)
-            resetTempRecentSearchId()
         }
     }
 
@@ -130,9 +127,9 @@ class SearchViewModel @Inject constructor(
         )
     }
 
-    fun resetTempRecentSearchId() {
+    fun updateErrorMessage(errorMessage: String?) {
         _searchScreenUiState.value = _searchScreenUiState.value.copy(
-            tempRecentSearchId = 0
+            errorMessage = errorMessage
         )
     }
 

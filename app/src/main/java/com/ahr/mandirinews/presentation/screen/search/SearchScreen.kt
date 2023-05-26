@@ -2,11 +2,15 @@ package com.ahr.mandirinews.presentation.screen.search
 
 import androidx.annotation.RawRes
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -21,6 +25,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -61,11 +66,11 @@ fun SearchScreen(
     val searchButtonState by searchViewModel.searchButtonEnabled.collectAsState(initial = false)
 
     val screenTypeState = searchScreenUiState.screenTypeState
-    val screenActionState = searchScreenUiState.screenActionState
 
     val searchQuery = searchScreenUiState.searchQuery
     val searchedNews = searchScreenUiState.news.collectAsLazyPagingItems()
     val recentSearch = searchScreenUiState.recentSearch
+    val errorMessage = searchScreenUiState.errorMessage
 
     val dialogState = searchScreenUiState.dialogState
     val dialogTitle = searchScreenUiState.dialogTitle
@@ -75,8 +80,11 @@ fun SearchScreen(
         focusRequester.requestFocus()
     }
 
-    LaunchedEffect(key1 = screenActionState) {
-
+    LaunchedEffect(key1 = searchedNews.loadState.refresh) {
+        when (val response = searchedNews.loadState.refresh) {
+            is LoadState.Error -> searchViewModel.updateErrorMessage(response.error.message)
+            is LoadState.NotLoading, LoadState.Loading -> searchViewModel.updateErrorMessage(null)
+        }
     }
 
     if (dialogState) {
@@ -166,6 +174,13 @@ fun SearchScreen(
                             modifier = Modifier.padding(paddingValues)
                         )
                     }
+                    is LoadState.Error -> {
+                        NewsLottieScreenAnimation(
+                            rawRes = R.raw.lottie_network_error,
+                            modifier = Modifier.padding(paddingValues),
+                            description = errorMessage
+                        )
+                    }
                     is LoadState.NotLoading -> {
                         SearchScreenContent(
                             newsLazyPagingItems = searchedNews,
@@ -173,8 +188,6 @@ fun SearchScreen(
                                 .padding(paddingValues)
                                 .fillMaxSize()
                         )
-                    }
-                    is LoadState.Error -> {
                     }
                 }
             }
@@ -185,18 +198,31 @@ fun SearchScreen(
 @Composable
 fun NewsLottieScreenAnimation(
     modifier: Modifier = Modifier,
-    @RawRes rawRes: Int
+    @RawRes rawRes: Int,
+    description: String? = null
 ) {
     val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(resId = rawRes))
     Box(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        LottieAnimation(
-            composition = composition,
-            modifier = Modifier.size(256.dp),
-            iterations = LottieConstants.IterateForever,
-        )
+        Column(
+            modifier = Modifier.padding(32.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            LottieAnimation(
+                composition = composition,
+                modifier = Modifier.size(256.dp),
+                iterations = LottieConstants.IterateForever,
+            )
+            if (description != null) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = description,
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
     }
 
 }
