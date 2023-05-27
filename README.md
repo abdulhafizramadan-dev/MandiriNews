@@ -6,6 +6,8 @@
 3. **Search page** is used to search for news based on the title the user wants, news is displayed using pagination so that the user can continue to see the news until the last page.
 4. **Search History page** displays a list of searches that have been made by users, users can directly click on the search history to immediately search for the previous news. Or users can delete the search history that has been done.
 
+[Download Mandiri News](https://github.com/abdulhafizramadan-dev/MandiriNews/releases/download/v.1/app-debug.apk)
+
 [View Full Demo On Youtube](https://youtube.com/playlist?list=PLmMnsnLKsZuAfjSRijQzygo1bCweTGxFN)
 
 ## Screen List
