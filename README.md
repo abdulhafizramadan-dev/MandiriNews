@@ -14,7 +14,8 @@
 | ![1 Home - Placeholder](https://github.com/abdulhafizramadan-dev/MandiriNews/assets/111162360/43e4507a-a4ae-4171-b379-6c24be146600) | ![2 Home - Headline News](https://github.com/abdulhafizramadan-dev/MandiriNews/assets/111162360/d14ee75f-9afb-4e7d-b3ca-5b500721deea) | ![3 Home - All News](https://github.com/abdulhafizramadan-dev/MandiriNews/assets/111162360/cce0b54f-73b4-490b-acd3-74c8e99346ac) |
 
 #### Demo
-<iframe width="560" height="315" src="https://www.youtube.com/embed/Odi-cVbIlhY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+https://github.com/abdulhafizramadan-dev/MandiriNews/assets/111162360/ba36c8cf-ba65-4e48-9870-ba0da88a63d1
+
 
 ### Location
 | Half | Full | Search |
@@ -26,7 +27,9 @@
 | ![7 Location - Dialog](https://github.com/abdulhafizramadan-dev/MandiriNews/assets/111162360/75ba34b5-a6a3-412d-a7d8-ffe2bf7ecb3c) | ![8 Location - Selected](https://github.com/abdulhafizramadan-dev/MandiriNews/assets/111162360/0558259a-8465-4bd2-8fe5-eee42c761072) |
 
 #### Demo
-<iframe width="560" height="315" src="https://www.youtube.com/embed/SkFlf_P6TPM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+https://github.com/abdulhafizramadan-dev/MandiriNews/assets/111162360/d4381e88-3caf-4574-9e8c-cfc47c3cbf15
+
+
 
 ### Search
 | Recent | Delete Dialog | Searching |
@@ -38,13 +41,15 @@
 | ![12 Search - Result](https://github.com/abdulhafizramadan-dev/MandiriNews/assets/111162360/931843bc-b6ed-45d3-963f-29050d01cea6) | ![13 Search - Not Found](https://github.com/abdulhafizramadan-dev/MandiriNews/assets/111162360/a619d57b-ad7b-408b-9b54-55003c8a349d) | ![14 Search - No Connection](https://github.com/abdulhafizramadan-dev/MandiriNews/assets/111162360/5f63befe-e80c-4cf5-a708-8551f80d02e7) |
 
 #### Demo Search - Normal
-<iframe width="560" height="315" src="https://www.youtube.com/embed/uOykBnI3bnw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+https://github.com/abdulhafizramadan-dev/MandiriNews/assets/111162360/ddddf39b-89bc-4d88-9e36-9bbe8821fa5b
 
 #### Demo Search - Not Found
-<iframe width="560" height="315" src="https://www.youtube.com/embed/HJ0ODe2ytUY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+https://github.com/abdulhafizramadan-dev/MandiriNews/assets/111162360/0eb1aa6c-5bb8-4664-82c1-b6587190013e
 
 #### Demo Search - No Connection
-<iframe width="560" height="315" src="https://www.youtube.com/embed/R9bOKsu82hM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+https://github.com/abdulhafizramadan-dev/MandiriNews/assets/111162360/65823695-3259-4a26-b46e-9d89e0a017fb
 
 ### Demo Offline Mode
-<iframe width="560" height="315" src="https://www.youtube.com/embed/659Q-vkj7Rc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+https://github.com/abdulhafizramadan-dev/MandiriNews/assets/111162360/1f44a91c-9b11-409d-b2b0-a78c4ad3f200
+
+
