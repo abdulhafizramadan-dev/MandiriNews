@@ -105,7 +105,8 @@ dependencies {
     // MessageBarCompose Library
     implementation(libs.message.bar.compose)
 
-    implementation(libs.worldCountryData)
+//    implementation(libs.worldCountryData)
+    implementation("com.github.blongho:worldCountryData:v1.5.4-alpha-1")
 
     implementation(libs.lottie.compose)
 

@@ -1,6 +1,6 @@
 [versions]
 browser = "1.5.0"
-com-android-application = "8.1.0-alpha11"
+com-android-application = "8.1.4"
 compose-navigation = "1.9.42-beta"
 accompanist-swiperefresh = "0.31.2-alpha"
 compose-shimmer = "1.0.5"
@@ -27,7 +27,7 @@ paging-runtime = "3.1.1"
 retrofit = "2.9.0"
 room-runtime = "2.5.1"
 hilt = "2.44"
-worldCountryData = "1.5.4-alpha-1"
+worldCountryData = "1.5.3"
 
 [libraries]
 
