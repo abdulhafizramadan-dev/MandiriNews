@@ -9,7 +9,7 @@
 Tech Stack: 
 Kotlin, Jetpack Compose, Coroutines, Material Design 3, Compose Navigation, MVVM, Clean Architecture, Retrofit, Chucker, Compose Shimmer, Hilt, Coil, Android Browser, Lottie
 
-[Download Mandiri News](https://github.com/abdulhafizramadan-dev/MandiriNews/releases/download/v.1/app-debug.apk)
+[Download Mandiri News](https://drive.google.com/drive/folders/1OZX8lZuty1jhw8gt-DJ_2vyqzrahvsM6?usp=sharing)
 
 [View Full Demo On Youtube](https://youtube.com/playlist?list=PLmMnsnLKsZuAfjSRijQzygo1bCweTGxFN)
 
